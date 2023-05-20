@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class CarServiceImp implements CarService {
@@ -30,7 +31,7 @@ public class CarServiceImp implements CarService {
     }
 
 
-    public User getUserByCar(String model, int series){
+    public Optional<User> getUserByCar(String model, int series){
         return carDao.getUserByCar(model, series);
     }
 

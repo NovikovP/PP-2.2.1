@@ -7,15 +7,13 @@ import org.springframework.stereotype.Repository;
 
 import javax.persistence.TypedQuery;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public class UserDaoImp implements UserDao {
 
-   private final SessionFactory sessionFactory;
-
-   public UserDaoImp(SessionFactory sessionFactory) {
-      this.sessionFactory = sessionFactory;
-   }
+   @Autowired
+   private SessionFactory sessionFactory;
 
    @Override
    public void add(User user) {
@@ -27,6 +25,15 @@ public class UserDaoImp implements UserDao {
    public List<User> listUsers() {
       TypedQuery<User> query=sessionFactory.getCurrentSession().createQuery("from User");
       return query.getResultList();
+   }
+
+
+   @Override
+   public Optional<User> getUser(String model, int series) {
+      String hql = "from User user where user.cars.model = :model and user.cars.series = :series";
+      TypedQuery<User> query = sessionFactory.getCurrentSession().createQuery(hql);
+      query.setParameter("model", model).setParameter("series", series);
+      return query.getResultStream().findAny();
    }
 
 }
